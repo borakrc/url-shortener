@@ -28,6 +28,7 @@ def ExceptionHandler(f):
         except TokenMissingError:
             return make_response(jsonify({'message': 'Token is missing.'}), 401)
         except RedirectError as e:
+            # noinspection PyArgumentEqualDefault
             return redirect(e.redirectUrl, code=302)
 
     return decorator
