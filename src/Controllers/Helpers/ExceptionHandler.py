@@ -1,8 +1,10 @@
 from functools import wraps
 from flask import jsonify, make_response
+from werkzeug.utils import redirect
 from src.Exceptions.AuthorizationError import AuthorizationError
 from src.Exceptions.DuplicateUserError import DuplicateUserError
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
+from src.Exceptions.RedirectError import RedirectError
 from src.Exceptions.TokenInvalidError import TokenInvalidError
 from src.Exceptions.TokenMissingError import TokenMissingError
 from src.Exceptions.UrlNotFoundError import UrlNotFoundError
@@ -25,5 +27,7 @@ def ExceptionHandler(f):
             return make_response(jsonify({'message': 'Token is invalid.'}), 401)
         except TokenMissingError:
             return make_response(jsonify({'message': 'Token is missing.'}), 401)
+        except RedirectError as e:
+            return redirect(e.redirectUrl, code=302)
 
     return decorator
