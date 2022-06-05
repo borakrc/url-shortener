@@ -3,6 +3,8 @@ from flask import jsonify, make_response
 from src.Exceptions.AuthorizationError import AuthorizationError
 from src.Exceptions.DuplicateUserError import DuplicateUserError
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
+from src.Exceptions.TokenInvalidError import TokenInvalidError
+from src.Exceptions.TokenMissingError import TokenMissingError
 
 
 def ExceptionHandler(f):
@@ -16,5 +18,9 @@ def ExceptionHandler(f):
             return make_response(jsonify({'message': 'User already exists.'}), 409)
         except EmptyUserInformationError:
             return make_response(jsonify({'message': 'User could not be found.'}), 404)
+        except TokenInvalidError:
+            return make_response(jsonify({'message': 'Token is invalid.'}), 401)
+        except TokenMissingError:
+            return make_response(jsonify({'message': 'Token is missing.'}), 401)
 
     return decorator
