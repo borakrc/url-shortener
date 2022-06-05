@@ -5,6 +5,7 @@ from src.Exceptions.DuplicateUserError import DuplicateUserError
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
 from src.Exceptions.TokenInvalidError import TokenInvalidError
 from src.Exceptions.TokenMissingError import TokenMissingError
+from src.Exceptions.UrlNotFoundError import UrlNotFoundError
 
 
 def ExceptionHandler(f):
@@ -18,6 +19,8 @@ def ExceptionHandler(f):
             return make_response(jsonify({'message': 'User already exists.'}), 409)
         except EmptyUserInformationError:
             return make_response(jsonify({'message': 'User could not be found.'}), 404)
+        except UrlNotFoundError:
+            return make_response(jsonify({'message': 'Url could not be found.'}), 404)
         except TokenInvalidError:
             return make_response(jsonify({'message': 'Token is invalid.'}), 401)
         except TokenMissingError:
