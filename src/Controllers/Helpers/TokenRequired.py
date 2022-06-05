@@ -1,6 +1,7 @@
 import jwt
 from functools import wraps
 from flask import request
+from jwt import InvalidSignatureError
 from src.Exceptions.TokenInvalidError import TokenInvalidError
 from src.Exceptions.TokenMissingError import TokenMissingError
 from src.config import Config
@@ -19,8 +20,9 @@ def TokenRequired(f):
 
         try:
             jwt.decode(token, Config.jwtSecret, algorithms=["HS256"])
-            return f(*args, **kwargs)
-        except:
+        except InvalidSignatureError:
             raise TokenInvalidError
+
+        return f(*args, **kwargs)
 
     return decorator
