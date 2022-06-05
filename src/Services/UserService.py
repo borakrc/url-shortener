@@ -12,7 +12,7 @@ class UserService:
         self.config = config
         self.dbAdapter: IDbAdapter = config.dbAdapter
 
-    def login(self, loginAttemptCredentials: UserModel):
+    def login(self, loginAttemptCredentials: UserModel) -> str:
         if not self.config.dbAdapter.authorizeUser(loginAttemptCredentials):
             raise AuthorizationError
 
