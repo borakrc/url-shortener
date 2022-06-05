@@ -72,3 +72,23 @@ hashing it. See https://en.wikipedia.org/wiki/Salt_(cryptography)
 Just run `vercel`. This will upload the envs to the serverless project. 
 One of the URIs on your console after it is uploaded is a functional deployment of this project,
 the other one is a link to the serverless portal page of the project.
+
+## Assumptions
+- Url will not be deleted, modified or expire once created.
+- User will not be deleted or modified once created.
+- System gives a login token when user registers.
+- System does not verify the validity of URLs.
+- JWT tokens do not expire.
+- Short URLs will not be owned by a user. 
+If two users create a short version of the same URL, they will share the short URL.
+- Once registered, users will not forget their passwords or change their emails.
+- Users can not logout.
+- Users do not need to provide a valid token to consume a short url.
+
+## Further work
+Analytics
+Logging and error monitoring
+Allow user to create custom short urls
+By creating the JWT token with an asymmetric key, we can broadcast our public key and 
+provide others verify the validation of our tokens. This will provide scalability.
+
