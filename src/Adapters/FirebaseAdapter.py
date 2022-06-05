@@ -3,7 +3,10 @@ from google.cloud import firestore
 from google.cloud.firestore_v1 import DocumentReference
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
+from src.Exceptions.UrlNotFoundError import UrlNotFoundError
 from src.Models.EmailModel import EmailModel
+from src.Models.UrlKeyModel import UrlKeyModel
+from src.Models.UrlModel import UrlModel
 from src.Models.UserModel import UserModel
 from src.Models.UserModelFactory import UserModelFactory
 
@@ -27,6 +30,20 @@ class FirebaseAdapter(IDbAdapter):
         user = UserModelFactory(self.config).fromDict(userDict)
 
         return user
+
+    def resolveShortUrl(self, shortUrl: UrlKeyModel) -> UrlModel:
+        urlDict: dict = self.db.collection('urls').document(shortUrl.toString()).get().to_dict()
+        if not urlDict:
+            raise UrlNotFoundError
+
+        url = UrlModel(urlDict['target'])
+
+        return url
+
+    def putShortUrl(self, shortUrl: UrlKeyModel) -> None:
+        doc_ref: DocumentReference = self.db.collection('urls').document(shortUrl.toString())
+        doc_ref.set({'target': shortUrl.targetUrl.toString()})
+        return
 
     def putUser(self, user: UserModel) -> None:
         doc_ref: DocumentReference = self.db.collection('users').document(user.email.toString())
