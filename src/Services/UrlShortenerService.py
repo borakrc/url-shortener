@@ -26,3 +26,7 @@ class UrlShortenerService:
         self.dbAdapter.putShortUrl(shortUrl)
         return shortUrl
 
+    def resolveShortUrl(self, shortUrl: UrlKeyModel) -> UrlModel:
+        longUrlInDb = self.dbAdapter.resolveShortUrl(shortUrl)
+        return longUrlInDb
+
