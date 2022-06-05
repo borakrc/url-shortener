@@ -4,6 +4,10 @@ from src.Models.UserModel import UserModel
 
 class IDbAdapter(ABC):
     @abstractmethod
+    def authorizeUser(self, loginAttemptCredentials: UserModel) -> bool:
+        raise NotImplementedError
+
+    @abstractmethod
     def getUser(self, email: EmailModel) -> UserModel:
         raise NotImplementedError
 

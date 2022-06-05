@@ -33,6 +33,12 @@ class FirebaseAdapter(IDbAdapter):
         doc_ref.set(user.toJson())
         return
 
+    def authorizeUser(self, loginAttemptCredentials: UserModel) -> bool:
+        user = self.getUser(loginAttemptCredentials.email)
+
+        success: bool = user.compareCredentials(loginAttemptCredentials)
+        return success
+
     def ifUserExists(self, email: EmailModel) -> bool:
         try:
             user = self.getUser(email)
