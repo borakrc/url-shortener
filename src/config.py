@@ -12,6 +12,7 @@ class Config:
     urlShortenerService: UrlShortenerService = None
     dbAdapter: IDbAdapter = None
     passwordSalt: str = None
+    minimumShortUrlLength: int = 4
 
     @staticmethod
     def initConfig():
@@ -24,3 +25,4 @@ class Config:
 
         Config.dbAdapter = FirebaseAdapter(Config)
         Config.userService = UserService(Config)
+        Config.urlShortenerService = UrlShortenerService(Config)
