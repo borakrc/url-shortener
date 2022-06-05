@@ -12,6 +12,18 @@ class UserService:
         self.config = config
         self.dbAdapter: IDbAdapter = config.dbAdapter
 
+    def login(self, loginAttemptCredentials: UserModel):
+        if not self.config.dbAdapter.authorizeUser(loginAttemptCredentials):
+            raise AuthorizationError
+
+        jwtSecret = self._getJwtSecret()
+        encoded_jwt = jwt.encode({"email": loginAttemptCredentials.email.toString()}, jwtSecret, algorithm="HS256")
+
+        return encoded_jwt
+
+    def _getJwtSecret(self) -> str:
+        return self.config.jwtSecret
+
     def register(self, user: UserModel) -> None:
         userExists: bool = self.config.dbAdapter.ifUserExists(user.email)
         if userExists:
