@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
+from src.Controllers.LoginController import LoginController
 from src.Controllers.SignUpController import SignUpController
 from src.config import Config
 
@@ -9,6 +10,7 @@ Config.initConfig()
 api = Api(app)
 
 api.add_resource(SignUpController, '/api/v1/signup')
+api.add_resource(LoginController, '/api/v1/login')
 
 def serve():
     app.run(debug=True, host='0.0.0.0', port=5001)
