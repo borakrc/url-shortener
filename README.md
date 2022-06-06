@@ -6,7 +6,7 @@ It is deployed to a serverless cloud called Vercel, which communicates with Goog
 
 ## Endpoints
 ### /api/v1/signup
-Methods: [POST]
+- Methods: [POST]
 - Example url: https://url-shortener-borakrc.vercel.app/api/v1/signup
 - Headers: {}
 - Body: {email: string, password: string}
@@ -28,7 +28,7 @@ Methods: [POST]
 
 ### /\<shortUrl>
 - Methods: [GET]
-- Example url: https://url-shortener-borakrc.vercel.app/zOog
+- Example url: https://url-shortener-borakrc.vercel.app/RHpa
 - Headers: {}
 - Returns: 302 or 404
 
