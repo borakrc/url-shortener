@@ -15,8 +15,9 @@ class UrlShortenerService:
     def createShortUrl(self, longUrl: UrlModel) -> UrlKeyModel:
         counter = 0
         longUrlInDb: UrlModel = None
+        shortUrl: UrlKeyModel = None
         while longUrlInDb or counter == 0:
-            shortUrl: UrlKeyModel = UrlKeyFactory().fromLongUrl(longUrl, self.config.minimumShortUrlLength + counter)
+            shortUrl = UrlKeyFactory().fromLongUrl(longUrl, self.config.minimumShortUrlLength + counter)
             try:
                 longUrlInDb = self.dbAdapter.resolveShortUrl(shortUrl)
             except UrlNotFoundError:
