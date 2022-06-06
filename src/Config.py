@@ -21,7 +21,6 @@ class Config(IConfig):
     @staticmethod
     def initConfig() -> None:
         from dotenv import load_dotenv
-
         load_dotenv()
 
         Config.jwtSecret = os.getenv('JWT_SECRET')
