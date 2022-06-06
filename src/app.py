@@ -6,7 +6,7 @@ from src.Controllers.LoginController import LoginController
 from src.Controllers.ShortUrlController import ShortUrlController
 from src.Controllers.ShortUrlResolveController import ShortUrlResolveController
 from src.Controllers.SignUpController import SignUpController
-from src.config import Config
+from src.Config import Config
 
 app = Flask(__name__)
 Config.initConfig()

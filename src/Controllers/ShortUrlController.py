@@ -5,7 +5,7 @@ from src.Controllers.Helpers.TokenRequired import TokenRequired
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
 from src.Services.IUrlShortenerService import IUrlShortenerService
-from src.config import Config
+from src.Config import Config
 
 class ShortUrlController(Resource):
     def __init__(self):

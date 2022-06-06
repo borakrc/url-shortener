@@ -4,7 +4,7 @@ from flask import request
 from jwt import InvalidSignatureError
 from src.Exceptions.TokenInvalidError import TokenInvalidError
 from src.Exceptions.TokenMissingError import TokenMissingError
-from src.config import Config
+from src.Config import Config
 
 
 def TokenRequired(f):

@@ -4,7 +4,7 @@ from src.Exceptions.RedirectError import RedirectError
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
 from src.Services.IUrlShortenerService import IUrlShortenerService
-from src.config import Config
+from src.Config import Config
 
 class ShortUrlResolveController(Resource):
     def __init__(self):
