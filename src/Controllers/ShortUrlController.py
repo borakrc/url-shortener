@@ -14,6 +14,8 @@ class ShortUrlController(Resource):
     @ExceptionHandler
     @TokenRequired
     def put(self):
+        # This is a put request because when it's called twice with the same data,
+        # the second request doesn't change the state of the system.
         longUrl: UrlModel = UrlModel(request.form['longUrl'])
         shortUrl: UrlKeyModel = self.urlShortenerService.createShortUrl(longUrl)
 

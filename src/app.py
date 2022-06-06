@@ -15,7 +15,7 @@ api = Api(app)
 api.add_resource(HelloWorldController, '/')
 api.add_resource(SignUpController, '/api/v1/signup')
 api.add_resource(LoginController, '/api/v1/login')
-api.add_resource(ShortUrlController, '/api/v1/short-url')
+api.add_resource(ShortUrlController, '/api/v1/shortenUrl')
 api.add_resource(ShortUrlResolveController, '/<path:path>')
 
 def serve():
