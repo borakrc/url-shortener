@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.IConfig import IConfig
+from src.Adapters.IDbAdapter import IDbAdapter
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
 
@@ -7,11 +7,16 @@ from src.Models.UrlModel import UrlModel
 class IUrlShortenerService(ABC):
     @property
     @abstractmethod
-    def config(self) -> IConfig:
+    def dbAdapter(self) -> IDbAdapter:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def minimumShortUrlLength(self) -> int:
         raise NotImplementedError
 
     @abstractmethod
-    def __init__(self, config: IConfig):
+    def __init__(self, dbAdapter: IDbAdapter, minimumShortUrlLength: int):
         raise NotImplementedError
 
     @abstractmethod

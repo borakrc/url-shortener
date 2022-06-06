@@ -1,6 +1,5 @@
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.UrlNotFoundError import UrlNotFoundError
-from src.IConfig import IConfig
 from src.Models import UrlKeyModel
 from src.Models.UrlKeyFactory import UrlKeyFactory
 from src.Models.UrlModel import UrlModel
@@ -8,18 +7,19 @@ from src.Services.IUrlShortenerService import IUrlShortenerService
 
 
 class UrlShortenerService(IUrlShortenerService):
-    config: IConfig = None
+    dbAdapter: IDbAdapter = None
+    minimumShortUrlLength: int = None
 
-    def __init__(self, config: IConfig):
-        self.config = config
-        self.dbAdapter: IDbAdapter = config.dbAdapter
+    def __init__(self, dbAdapter: IDbAdapter, minimumShortUrlLength: int):
+        self.dbAdapter: IDbAdapter = dbAdapter
+        self.minimumShortUrlLength: int = minimumShortUrlLength
 
     def createShortUrl(self, longUrl: UrlModel) -> UrlKeyModel:
         counter = 0
         longUrlInDb: UrlModel = None
         shortUrl: UrlKeyModel = None
         while longUrlInDb or counter == 0:
-            shortUrl = UrlKeyFactory().fromLongUrl(longUrl, self.config.minimumShortUrlLength + counter)
+            shortUrl = UrlKeyFactory().fromLongUrl(longUrl, self.minimumShortUrlLength + counter)
             try:
                 longUrlInDb = self.dbAdapter.resolveShortUrl(shortUrl)
             except UrlNotFoundError:

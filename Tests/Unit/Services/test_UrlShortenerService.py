@@ -12,7 +12,7 @@ class TestUrlShortenerService(TestCase):
     def test_resolveShortUrl_method_calls_dbAdapter_resolveShortUrl_method_once_with_correct_url_key(self):
         mockUrlKey = MagicMock()
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         service.resolveShortUrl(mockUrlKey)
 
         self.mockConfig.dbAdapter.resolveShortUrl.assert_called_once_with(mockUrlKey)
@@ -21,7 +21,7 @@ class TestUrlShortenerService(TestCase):
     def test_createShortUrl_method_calls_dbAdapter_putShortUrl_method_once_with_correct_url_key(self):
         mockUrl = MagicMock()
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         service.createShortUrl(mockUrl)
 
         self.mockConfig.dbAdapter.putShortUrl.assert_called_once()
@@ -29,7 +29,7 @@ class TestUrlShortenerService(TestCase):
     def test_createShortUrl_method_calls_dbAdapter_resolveShortUrl_method_until_it_returns_falsy_value(self):
         mockUrl = MagicMock()
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         service.createShortUrl(mockUrl)
 
         self.assertEqual(self.mockConfig.dbAdapter.resolveShortUrl.call_count, 3)
@@ -37,7 +37,7 @@ class TestUrlShortenerService(TestCase):
     def test_createShortUrl_method_creates_short_url_with_correct_length(self):
         mockUrl = UrlModel("testUrl")
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         urlKey: UrlKeyModel = service.createShortUrl(mockUrl)
 
         self.assertEqual(len(urlKey.toString()), 3)
@@ -45,7 +45,7 @@ class TestUrlShortenerService(TestCase):
     def test_createShortUrl_method_creates_same_key_for_same_url(self):
         mockUrl = UrlModel("testUrl")
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         urlKey: UrlKeyModel = service.createShortUrl(mockUrl)
         urlKey2: UrlKeyModel = service.createShortUrl(mockUrl)
 
@@ -55,7 +55,7 @@ class TestUrlShortenerService(TestCase):
         mockUrl = UrlModel("testUrl")
         mockUrl2 = UrlModel("testUrl2")
 
-        service = UrlShortenerService(self.mockConfig)
+        service = UrlShortenerService(self.mockConfig.dbAdapter, self.mockConfig.minimumShortUrlLength)
         urlKey: UrlKeyModel = service.createShortUrl(mockUrl)
         urlKey2: UrlKeyModel = service.createShortUrl(mockUrl2)
 

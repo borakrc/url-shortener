@@ -7,14 +7,16 @@ from src.Services.IUserService import IUserService
 from src.config import Config
 
 class SignUpController(Resource):
+    userService: IUserService = None
+
     def __init__(self):
-        self.userService: IUserService = Config.userService
+        self.userService = Config.userService
 
     @ExceptionHandler
     def post(self):
         rawEmail: str = request.form['email']
         rawPassword: str = request.form['password']
-        user: UserModel = UserModelFactory(Config).createInstance(rawEmail, rawPassword)
+        user: UserModel = UserModelFactory(Config.passwordSalt).createInstance(rawEmail, rawPassword)
 
         self.userService.register(user)
 

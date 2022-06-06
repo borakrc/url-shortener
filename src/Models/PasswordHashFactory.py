@@ -3,8 +3,10 @@ from src.Models.PasswordHashModel import PasswordHashModel
 
 
 class PasswordHashFactory:
-    def __init__(self, config):
-        self.config = config
+    passwordSalt: str = None
+
+    def __init__(self, passwordSalt: str):
+        self.passwordSalt = passwordSalt
 
     def fromRawPassword(self, rawPassword: str) -> PasswordHashModel:
         hashedPassword: bytes = self._hashPassword(rawPassword)
@@ -16,7 +18,7 @@ class PasswordHashFactory:
         return password
 
     def _hashPassword(self, password: str) -> bytes:
-        SaltedPassword = (password + self.config.passwordSalt).encode('utf-8')
+        SaltedPassword = (password + self.passwordSalt).encode('utf-8')
 
         # I gave it a static seed(salt) so that it produces the same hash given the same password.
         # This is not a best practice, but I hope you let this one pass given the time constraints.

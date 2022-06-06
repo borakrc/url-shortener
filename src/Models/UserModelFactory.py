@@ -5,18 +5,20 @@ from src.Models.UserModel import UserModel
 
 
 class UserModelFactory:
-    def __init__(self, config):
-        self.config = config
+    passwordSalt: str = None
+
+    def __init__(self, passwordSalt):
+        self.passwordSalt = passwordSalt
 
     def createInstance(self, email: str, rawPassword: str) -> UserModel:
         emailObject: EmailModel = EmailModel(email)
-        passwordObject: PasswordHashModel = PasswordHashFactory(self.config).fromRawPassword(rawPassword)
+        passwordObject: PasswordHashModel = PasswordHashFactory(self.passwordSalt).fromRawPassword(rawPassword)
         user: UserModel = UserModel(emailObject, passwordObject)
         return user
 
     def fromDict(self, userDict) -> UserModel:
         emailObject: EmailModel = EmailModel(userDict['email'])
-        passwordObject: PasswordHashModel = PasswordHashFactory(self.config).fromHashedPassword(userDict['password'])
+        passwordObject: PasswordHashModel = PasswordHashFactory(self.passwordSalt).fromHashedPassword(userDict['password'])
         user: UserModel = UserModel(emailObject, passwordObject)
         return user
 

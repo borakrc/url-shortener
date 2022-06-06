@@ -14,12 +14,12 @@ class TestUserService(TestCase):
     def test_login_raises_AuthorizationError_when_credentials_false(self):
         self.mockConfig.dbAdapter.authorizeUser.return_value = False
 
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         self.assertRaises(AuthorizationError, service.login, self.mockUserModel)
 
     def test_login_does_not_raise_AuthorizationError_when_credentials_true(self):
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         try:
             service.login(self.mockUserModel)
@@ -27,7 +27,7 @@ class TestUserService(TestCase):
             self.fail()
 
     def test_login_returns_correct_jwt_token(self):
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         expectedToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1vY2tFbWFpbCJ9.v6n4DyY-RF2VcKjZAu19nECG5kwDia6k4EqBZBHGWF8'
         self.assertEqual(expectedToken, service.login(self.mockUserModel))
@@ -36,12 +36,12 @@ class TestUserService(TestCase):
     def test_register_raises_DuplicateUserError_if_user_already_exists(self):
         self.mockConfig.dbAdapter.ifUserExists.return_value = True
 
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         self.assertRaises(DuplicateUserError, service.register, self.mockUserModel)
 
     def test_register_does_not_raise_DuplicateUserError_if_user_does_not_exist(self):
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         try:
             service.register(self.mockUserModel)
@@ -49,7 +49,7 @@ class TestUserService(TestCase):
             self.fail()
 
     def test_register_calls_dbAdapter_putUser_method_once_if_user_does_not_exist(self):
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         service.register(self.mockUserModel)
 
@@ -58,7 +58,7 @@ class TestUserService(TestCase):
     def test_register_does_not_call_dbAdapter_putUser_method_if_user_already_exist(self):
         self.mockConfig.dbAdapter.ifUserExists.return_value = True
 
-        service = UserService(self.mockConfig)
+        service = UserService(self.mockConfig.dbAdapter, self.mockConfig.jwtSecret)
 
         try:
             service.register(self.mockUserModel)

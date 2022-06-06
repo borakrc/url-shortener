@@ -1,10 +1,7 @@
-import os
-from google.cloud import firestore
-from google.cloud.firestore_v1 import DocumentReference
+from google.cloud.firestore_v1 import DocumentReference, Client
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
 from src.Exceptions.UrlNotFoundError import UrlNotFoundError
-from src.IConfig import IConfig
 from src.Models.EmailModel import EmailModel
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
@@ -12,23 +9,19 @@ from src.Models.UserModel import UserModel
 from src.Models.UserModelFactory import UserModelFactory
 
 class FirebaseAdapter(IDbAdapter):
-    config: IConfig = None
+    passwordSalt: str = None
+    dbClient: Client = None
 
-    def __init__(self, config: IConfig):
-        self.config = config
-        self.db = firestore.Client.from_service_account_info({
-            "project_id": os.getenv('project_id'),
-            "private_key": os.getenv('private_key'),
-            "client_email": os.getenv('client_email'),
-            "token_uri": os.getenv('token_uri'),
-        })
+    def __init__(self, dbClient: Client, passwordSalt: str):
+        self.passwordSalt: str = passwordSalt
+        self.db = dbClient
 
     def getUser(self, email: EmailModel) -> UserModel:
         userDict: dict = self.db.collection('users').document(email.toString()).get().to_dict()
         if not userDict:
             raise EmptyUserInformationError
 
-        user = UserModelFactory(self.config).fromDict(userDict)
+        user = UserModelFactory(self.passwordSalt).fromDict(userDict)
 
         return user
 
