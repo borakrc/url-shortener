@@ -1,21 +1,22 @@
 import os
-
 from src.Adapters.FirebaseAdapter import FirebaseAdapter
 from src.Adapters.IDbAdapter import IDbAdapter
+from src.IConfig import IConfig
+from src.Services.IUrlShortenerService import IUrlShortenerService
+from src.Services.IUserService import IUserService
 from src.Services.UrlShortenerService import UrlShortenerService
 from src.Services.UserService import UserService
 
-
-class Config:
+class Config(IConfig):
     jwtSecret = None
-    userService: UserService = None
-    urlShortenerService: UrlShortenerService = None
+    userService: IUserService = None
+    urlShortenerService: IUrlShortenerService = None
     dbAdapter: IDbAdapter = None
     passwordSalt: str = None
     minimumShortUrlLength: int = 4
 
     @staticmethod
-    def initConfig():
+    def initConfig() -> None:
         from dotenv import load_dotenv
 
         load_dotenv()

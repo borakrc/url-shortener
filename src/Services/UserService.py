@@ -2,18 +2,20 @@ import jwt
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.AuthorizationError import AuthorizationError
 from src.Exceptions.DuplicateUserError import DuplicateUserError
+from src.IConfig import IConfig
 from src.Models.UserModel import UserModel
+from src.Services.IUserService import IUserService
 
 
-class UserService:
-    config = None
+class UserService(IUserService):
+    config: IConfig = None
 
-    def __init__(self, config):
+    def __init__(self, config: IConfig):
         self.config = config
         self.dbAdapter: IDbAdapter = config.dbAdapter
 
     def login(self, loginAttemptCredentials: UserModel) -> str:
-        if not self.config.dbAdapter.authorizeUser(loginAttemptCredentials):
+        if not self.dbAdapter.authorizeUser(loginAttemptCredentials):
             raise AuthorizationError
 
         jwtSecret = self._getJwtSecret()
@@ -25,10 +27,10 @@ class UserService:
         return self.config.jwtSecret
 
     def register(self, user: UserModel) -> None:
-        userExists: bool = self.config.dbAdapter.ifUserExists(user.email)
+        userExists: bool = self.dbAdapter.ifUserExists(user.email)
         if userExists:
             raise DuplicateUserError
 
-        self.config.dbAdapter.putUser(user)
+        self.dbAdapter.putUser(user)
         return
 

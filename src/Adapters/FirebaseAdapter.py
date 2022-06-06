@@ -4,6 +4,7 @@ from google.cloud.firestore_v1 import DocumentReference
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.EmptyUserInformationError import EmptyUserInformationError
 from src.Exceptions.UrlNotFoundError import UrlNotFoundError
+from src.IConfig import IConfig
 from src.Models.EmailModel import EmailModel
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
@@ -11,9 +12,9 @@ from src.Models.UserModel import UserModel
 from src.Models.UserModelFactory import UserModelFactory
 
 class FirebaseAdapter(IDbAdapter):
-    config = None
+    config: IConfig = None
 
-    def __init__(self, config):
+    def __init__(self, config: IConfig):
         self.config = config
         self.db = firestore.Client.from_service_account_info({
             "project_id": os.getenv('project_id'),

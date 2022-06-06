@@ -3,11 +3,12 @@ from flask import request
 from src.Controllers.Helpers.ExceptionHandler import ExceptionHandler
 from src.Models.UserModel import UserModel
 from src.Models.UserModelFactory import UserModelFactory
+from src.Services.IUserService import IUserService
 from src.config import Config
 
 class SignUpController(Resource):
     def __init__(self):
-        self.userService = Config.userService
+        self.userService: IUserService = Config.userService
 
     @ExceptionHandler
     def post(self):

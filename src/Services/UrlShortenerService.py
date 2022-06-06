@@ -1,14 +1,16 @@
 from src.Adapters.IDbAdapter import IDbAdapter
 from src.Exceptions.UrlNotFoundError import UrlNotFoundError
+from src.IConfig import IConfig
 from src.Models import UrlKeyModel
 from src.Models.UrlKeyFactory import UrlKeyFactory
 from src.Models.UrlModel import UrlModel
+from src.Services.IUrlShortenerService import IUrlShortenerService
 
 
-class UrlShortenerService:
-    config = None
+class UrlShortenerService(IUrlShortenerService):
+    config: IConfig = None
 
-    def __init__(self, config):
+    def __init__(self, config: IConfig):
         self.config = config
         self.dbAdapter: IDbAdapter = config.dbAdapter
 

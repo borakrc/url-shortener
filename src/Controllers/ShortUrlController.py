@@ -4,16 +4,17 @@ from src.Controllers.Helpers.ExceptionHandler import ExceptionHandler
 from src.Controllers.Helpers.TokenRequired import TokenRequired
 from src.Models.UrlKeyModel import UrlKeyModel
 from src.Models.UrlModel import UrlModel
+from src.Services.IUrlShortenerService import IUrlShortenerService
 from src.config import Config
 
 class ShortUrlController(Resource):
     def __init__(self):
-        pass
+        self.urlShortenerService: IUrlShortenerService = Config.urlShortenerService
 
     @ExceptionHandler
     @TokenRequired
     def put(self):
         longUrl: UrlModel = UrlModel(request.form['longUrl'])
-        shortUrl: UrlKeyModel = Config.urlShortenerService.createShortUrl(longUrl)
+        shortUrl: UrlKeyModel = self.urlShortenerService.createShortUrl(longUrl)
 
         return {'shortUrl': shortUrl.toPath()}
